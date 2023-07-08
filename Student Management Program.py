@@ -14,9 +14,26 @@ while True:
     print("7. Exit")
     choice = int(input("Enter your choice: "))
 
-   
 
-    if choice == 6:  # Display Student IDs
+    if choice == 1:  # Add a Student ID
+        id = int(input("Enter Student ID: "))
+        arr.append(Student(id))
+
+    elif choice == 2:  # Delete Student ID
+        id = int(input("Enter Student ID to delete: "))
+        found = False
+        for j in range(len(arr)):
+            if arr[j].id == id:
+                del arr[j]
+                found = True
+                break
+        if found:
+            print("Student ID deleted")
+        else:
+            print("Student ID not found")
+
+
+    elif choice == 6:  # Display Student IDs
         print("Student IDs:")
         for student in arr:
             print(student.id)
