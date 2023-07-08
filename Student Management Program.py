@@ -39,7 +39,18 @@ while True:
             arr.insert(position, Student(id))
         else:
             print("Invalid position")
+            
 
+    elif choice == 4:  # Search Student ID
+        id = int(input("Enter Student ID to search: "))
+        found = False
+        for j in range(len(arr)):
+            if arr[j].id == id:
+                print(f"Student ID found at position {j}")
+                found = True
+                break
+        if not found:
+            print("Student ID not found")
 
 
 
