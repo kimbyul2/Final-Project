@@ -32,6 +32,16 @@ while True:
         else:
             print("Student ID not found")
 
+    elif choice == 3:  # Insert Student ID at a given position or index
+        id = int(input("Enter Student ID: "))
+        position = int(input("Enter position: "))
+        if position >= 0 and position <= len(arr):
+            arr.insert(position, Student(id))
+        else:
+            print("Invalid position")
+
+
+
 
     elif choice == 6:  # Display Student IDs
         print("Student IDs:")
