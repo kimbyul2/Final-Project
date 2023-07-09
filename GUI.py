@@ -60,6 +60,9 @@ def update_student():
     entry_id.delete(0, tk.END)
     entry_new_id.delete(0, tk.END)
 
+def display_students():
+    result_label.config(text="Student IDs:\n" + "\n".join(str(student.id) for student in arr))
+
 root = tk.Tk()
 root.title("Student ID Manager")
 
@@ -95,6 +98,15 @@ button_search.grid(row=4, column=1, padx=5, pady=5)
 
 button_update = tk.Button(root, text="Update Student ID", command=update_student)
 button_update.grid(row=5, column=0, padx=5, pady=5)
+
+button_display = tk.Button(root, text="Display Student IDs", command=display_students)
+button_display.grid(row=5, column=1, padx=5, pady=5)
+
+result_label = tk.Label(root, text="")
+result_label.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
+
+button_exit = tk.Button(root, text="Exit", command=root.destroy)
+button_exit.grid(row=7, column=0, columnspan=2, padx=5, pady=5)
 
 arr = []
 
