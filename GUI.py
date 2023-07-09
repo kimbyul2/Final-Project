@@ -45,6 +45,20 @@ def search_student():
         result_label.config(text="Student ID not found")
     entry_id.delete(0, tk.END)
 
+def update_student():
+    id = int(entry_id.get())
+    new_id = int(entry_new_id.get())
+    found = False
+    for j in range(len(arr)):
+        if arr[j].id == id:
+            arr[j].id = new_id
+            result_label.config(text="Student ID updated")
+            found = True
+            break
+    if not found:
+        result_label.config(text="Student ID not found")
+    entry_id.delete(0, tk.END)
+    entry_new_id.delete(0, tk.END)
 
 root = tk.Tk()
 root.title("Student ID Manager")
@@ -78,6 +92,9 @@ button_insert.grid(row=4, column=0, padx=5, pady=5)
 
 button_search = tk.Button(root, text="Search Student ID", command=search_student)
 button_search.grid(row=4, column=1, padx=5, pady=5)
+
+button_update = tk.Button(root, text="Update Student ID", command=update_student)
+button_update.grid(row=5, column=0, padx=5, pady=5)
 
 arr = []
 
