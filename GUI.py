@@ -22,6 +22,18 @@ def delete_student():
         result_text.set("Student ID not found")
     entry_id.delete(0, tk.END)
 
+def insert_student():
+    id = int(entry_id.get())
+    position = int(entry_position.get())
+    if position >= 0 and position <= len(arr):
+        arr.insert(position, Student(id))
+        result_text.set("Student ID inserted")
+    else:
+        result_text.set("Invalid position")
+    entry_id.delete(0, tk.END)
+    entry_position.delete(0, tk.END)
+
+
 
 root = tk.Tk()
 root.title("Student ID Manager")
@@ -50,6 +62,8 @@ button_add.grid(row=3, column=0, padx=5, pady=5)
 button_delete = tk.Button(root, text="Delete Student ID", command=delete_student)
 button_delete.grid(row=3, column=1, padx=5, pady=5)
 
+button_insert = tk.Button(root, text="Insert Student ID", command=insert_student)
+button_insert.grid(row=4, column=0, padx=5, pady=5)
 
 arr = []
 
