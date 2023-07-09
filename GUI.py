@@ -1,10 +1,22 @@
 import tkinter as tk
+import pandas as pd
 
 class Student:
     def __init__(self, id, department, phone_number):
         self.id = id
         self.department = department
         self.phone_number = phone_number
+
+def save_data():
+    data = []
+    for student in arr:
+        data.append({
+            'Student ID': student.id,
+            'Department': student.department,
+            'Phone Number': student.phone_number
+        })
+    df = pd.DataFrame(data)
+    df.to_excel('student_data.xlsx', index=False)
 
 def add_student():
     id = int(entry_id.get())
@@ -14,6 +26,7 @@ def add_student():
     entry_id.delete(0, tk.END)
     entry_department.delete(0, tk.END)
     entry_phone.delete(0, tk.END)
+    save_data()
 
 def delete_student():
     id = int(entry_id.get())
