@@ -33,6 +33,17 @@ def insert_student():
     entry_id.delete(0, tk.END)
     entry_position.delete(0, tk.END)
 
+def search_student():
+    id = int(entry_id.get())
+    found = False
+    for j in range(len(arr)):
+        if arr[j].id == id:
+            result_label.config(text=f"Student ID found at position {j}")
+            found = True
+            break
+    if not found:
+        result_label.config(text="Student ID not found")
+    entry_id.delete(0, tk.END)
 
 
 root = tk.Tk()
@@ -64,6 +75,9 @@ button_delete.grid(row=3, column=1, padx=5, pady=5)
 
 button_insert = tk.Button(root, text="Insert Student ID", command=insert_student)
 button_insert.grid(row=4, column=0, padx=5, pady=5)
+
+button_search = tk.Button(root, text="Search Student ID", command=search_student)
+button_search.grid(row=4, column=1, padx=5, pady=5)
 
 arr = []
 
