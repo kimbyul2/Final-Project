@@ -9,7 +9,8 @@ Maintainer/Leader : 장현호
 
 김벼리
 
-프로젝트 소개 🏕 학생 관리 프로그램 🏕
+프로젝트 소개
+학생 관리 프로그램
 
 ▪️ 간단 소개 우리의 학생 관리 프로그램은 쉽고 편리하게 학생을 관리할 수 있는 프로그램이다.
 
@@ -25,4 +26,7 @@ Maintainer/Leader : 장현호
 
 팀플 기록 📅 📄 👧 Notion
 
-구현 기술 정하기 장현호, 심승환, 김벼리 2023-07-07
+- 구현 기술 정하기 장현호, 심승환, 김벼리 2023-07-07
+- 프로그램 구현 장현호 base 및 Add, Delete, Display Student ID
+               심승환 Insert, Update Student ID
+                김벼리 Update Student ID
