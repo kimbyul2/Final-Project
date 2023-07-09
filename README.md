@@ -27,6 +27,6 @@ Maintainer/Leader : 장현호
 팀플 기록 📅 📄 👧 Notion
 
 - 구현 기술 정하기 장현호, 심승환, 김벼리 2023-07-07
-- 프로그램 구현 장현호 base 및 Add, Delete, Display Student ID
+- 프로그램 구현 장현호 base 및 Add, Display Student ID
                심승환 Insert, Update Student ID
-                김벼리 Update Student ID
+                김벼리 delete, Update Student ID
