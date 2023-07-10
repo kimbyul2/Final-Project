@@ -41,18 +41,22 @@ def load_data():
             arr.append(Student(id, name, department, phone_number, email))
 
 def add_student():
-    id = int(entry_id.get())
+    id = entry_id.get()
     name = entry_name.get()
     department = entry_department.get()
     phone_number = entry_phone.get()
     email_id = entry_email_id.get()
     email_domain = email_var.get()
     
-    if email_domain == "이메일선택":
-        status_label.config(text="You must select an email domain.", fg="red")
+    if not id or not name or not department or not phone_number or not email_id or not email_domain:
+        status_label.config(text="Please enter all student information.", fg="red")
         return
     
-    if email_domain == "직접입력":
+    if email_domain == "select email":
+        status_label.config(text="Email domain must be selected.", fg="red")
+        return
+    
+    if email_domain == "Direct input":
         email_domain = entry_email_domain.get()
     
     email = f"{email_id}@{email_domain}"
@@ -64,7 +68,7 @@ def add_student():
     entry_department.delete(0, tk.END)
     entry_phone.delete(0, tk.END)
     entry_email_id.delete(0, tk.END)
-    email_var.set("이메일선택")
+    email_var.set("select email")
     email_dropdown.configure(state=tk.NORMAL)
     
     save_data()
@@ -72,14 +76,21 @@ def add_student():
 
 
 def delete_student():
-    id = int(entry_id.get())
+    id = entry_id.get()
+    
+    if not id:
+        status_label.config(text="Please enter your student ID.", fg="red")
+        return
+    
     found = False
     for j in range(len(arr)):
         if arr[j].id == id:
             del arr[j]
             found = True
             break
+    
     entry_id.delete(0, tk.END)
+    
     if found:
         status_label.config(text="Student ID deleted successfully", fg="green")
         update_excel_file()
@@ -88,53 +99,59 @@ def delete_student():
 
 
 def search_student():
-    id = int(entry_id.get())
-    found = False
-    result_text.config(state=tk.NORMAL)
-    result_text.delete(1.0, tk.END)
-    for j in range(len(arr)):
-        if arr[j].id == id:
-            result_text.insert(tk.END, f"Student ID found at position {j}\n")
-            result_text.insert(tk.END, f"ID: {arr[j].id}, Name: {arr[j].name}, Department: {arr[j].department}, Phone: {arr[j].phone_number}, Email: {arr[j].email}\n")
-            found = True
-            break
-    if not found:
-        result_text.insert(tk.END, "Student ID not found\n")
-    result_text.config(state=tk.DISABLED)
-    entry_id.delete(0, tk.END)
+    search_query = entry_id.get()
+    search_query = entry_name.get()
+    found_students = []
+    
+    if not search_query:
+        status_label.config(text="Please enter your student ID or name.", fg="red")
+        return
 
-def update_student():
-    id = int(entry_id.get())
-    found = False
-    for j in range(len(arr)):
-        if arr[j].id == id:
-            arr[j].name = entry_name.get()
-            arr[j].department = entry_department.get()
-            arr[j].phone_number = entry_phone.get()
-            email_id = entry_email_id.get()
-            email_domain = email_var.get()
-            if email_domain == "직접입력":
-                email_domain = entry_email_domain.get()
-            arr[j].email = f"{email_id}@{email_domain}"
-            result_text.config(state=tk.NORMAL)
-            result_text.delete(1.0, tk.END)
-            result_text.insert(tk.END, "Student ID updated successfully\n")
-            result_text.insert(tk.END, f"Updated ID: {arr[j].id}, Name: {arr[j].name}, Department: {arr[j].department}, Phone: {arr[j].phone_number}, Email: {arr[j].email}\n")
-            result_text.config(state=tk.DISABLED)
-            found = True
-            break
-    if not found:
+    for student in arr:
+        if str(student.id) == search_query or student.name.lower() == search_query.lower():
+            found_students.append(student)
+    
+    if found_students:
         result_text.config(state=tk.NORMAL)
         result_text.delete(1.0, tk.END)
-        result_text.insert(tk.END, "Student ID not found\n")
+        
+        for student in found_students:
+            result_text.insert(tk.END, f"Student ID: {student.id}\n")
+            result_text.insert(tk.END, f"Name: {student.name}\n")
+            result_text.insert(tk.END, f"Department: {student.department}\n")
+            result_text.insert(tk.END, f"Phone Number: {student.phone_number}\n")
+            result_text.insert(tk.END, f"Email: {student.email}\n")
+            result_text.insert(tk.END, "-" * 30 + "\n")
+        
         result_text.config(state=tk.DISABLED)
+        status_label.config(text="Your search results have been displayed.", fg="green")
+    else:
+        result_text.config(state=tk.NORMAL)
+        result_text.delete(1.0, tk.END)
+        result_text.config(state=tk.DISABLED)
+        status_label.config(text="No results were found for your search.", fg="red")
+    
     entry_id.delete(0, tk.END)
     entry_name.delete(0, tk.END)
-    entry_department.delete(0, tk.END)
-    entry_phone.delete(0, tk.END)
-    entry_email_id.delete(0, tk.END)
-    email_var.set("이메일선택")
-    email_dropdown.configure(state=tk.NORMAL)
+
+def update_student():
+    id = entry_id.get()
+    
+    if not id:
+        status_label.config(text="Please enter your student ID.", fg="red")
+        return
+    
+    found = False
+    for j in range(len(arr)):
+        if arr[j].id == id:
+            result_text.set("Student ID updated")
+            found = True
+            break
+    
+    if not found:
+        result_text.set("Student ID not found")
+    
+    entry_id.delete(0, tk.END)
 
 def display_students():
     result_text.config(state=tk.NORMAL)
@@ -146,7 +163,7 @@ def display_students():
 
 def select_email_domain(event):
     selected_domain = email_var.get()
-    if selected_domain == "직접입력":
+    if selected_domain == "Direct input":
         if not hasattr(root, 'entry_email_domain'):
             global entry_email_domain
             entry_email_domain = tk.Entry(root)
@@ -157,7 +174,7 @@ def select_email_domain(event):
             entry_email_domain.delete(0, tk.END)
     if entry_email_id['state'] == tk.NORMAL:
         entry_email_id.focus_set()
-    if selected_domain != "직접입력":
+    if selected_domain != "Direct input":
         entry_email_domain.configure(state=tk.DISABLED)
     else:
         entry_email_domain.configure(state=tk.NORMAL)
@@ -205,9 +222,9 @@ if __name__ == "__main__":
     entry_email_domain.configure(state=tk.DISABLED)
 
     email_var = tk.StringVar(root)
-    email_var.set("이메일선택")
+    email_var.set("select email")
     email_domain_options = [
-        "이메일선택",
+        "select email",
         "naver.com",
         "hanmail.net",
         "hotmail.com",
@@ -221,7 +238,7 @@ if __name__ == "__main__":
         "gmail.com",
         "korea.com",
         "hanmir.com",
-        "직접입력"
+        "Direct input"
     ]
     email_dropdown = tk.OptionMenu(root, email_var, *email_domain_options, command=select_email_domain)
     email_dropdown.grid(row=3, column=3, padx=5, pady=5)
@@ -244,8 +261,8 @@ if __name__ == "__main__":
     button_display = tk.Button(root, text="Display Student IDs", command=display_students)
     button_display.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
 
-    result_text = tk.Text(root, height=25, width=80)
-    result_text.grid(row=0, column=4, rowspan=9, padx=12, pady=5)
+    result_text = tk.Text(root, height=25, width=100)
+    result_text.grid(row=0, column=4, rowspan=9, padx=10, pady=5)
 
     status_label = tk.Label(root, text="", fg="red")
     status_label.grid(row=9, column=4, columnspan=4, padx=5, pady=5)
