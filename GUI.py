@@ -47,10 +47,18 @@ def add_student():
     phone_number = entry_phone.get()
     email_id = entry_email_id.get()
     email_domain = email_var.get()
+    
+    if email_domain == "이메일선택":
+        status_label.config(text="You must select an email domain.", fg="red")
+        return
+    
     if email_domain == "직접입력":
         email_domain = entry_email_domain.get()
+    
     email = f"{email_id}@{email_domain}"
+    
     arr.append(Student(id, name, department, phone_number, email))
+    
     entry_id.delete(0, tk.END)
     entry_name.delete(0, tk.END)
     entry_department.delete(0, tk.END)
@@ -58,7 +66,9 @@ def add_student():
     entry_email_id.delete(0, tk.END)
     email_var.set("이메일선택")
     email_dropdown.configure(state=tk.NORMAL)
+    
     save_data()
+    status_label.config(text="Student ID added successfully", fg="green")
 
 
 def delete_student():
