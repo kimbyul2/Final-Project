@@ -49,9 +49,9 @@ def delete_student():
 def search_student():
     id = int(entry_id.get())
     found = False
-    for student in arr:
-        if student.id == id:
-            result_text.set(f"Student ID: {student.id}\nDepartment: {student.department}\nPhone Number: {student.phone_number}\nEmail: {student.email}")
+    for j in range(len(arr)):
+        if arr[j].id == id:
+            result_text.set(f"Student ID found at position {j}")
             found = True
             break
     if not found:
@@ -59,7 +59,12 @@ def search_student():
     entry_id.delete(0, tk.END)
 
 def display_students():
-    result_text.set("Student IDs:\n" + "\n".join(f"ID: {student.id}, Department: {student.department}, Phone: {student.phone_number}, Email: {student.email}" for student in arr))
+    result_text.config(state=tk.NORMAL)
+    result_text.delete(1.0, tk.END)
+    result_text.insert(tk.END, "Student IDs:\n")
+    for student in arr:
+        result_text.insert(tk.END, f"ID: {student.id}, Department: {student.department}, Phone: {student.phone_number}, Email: {student.email}\n")
+    result_text.config(state=tk.DISABLED)
 
 root = tk.Tk()
 root.title("Student ID Manager")
@@ -100,13 +105,17 @@ button_search.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
 button_display = tk.Button(root, text="Display Student IDs", command=display_students)
 button_display.grid(row=7, column=0, columnspan=2, padx=5, pady=5)
 
-result_text = tk.StringVar()
+result_text = tk.Text(root, height=10, width=100)
+result_text.grid(row=0, column=2, rowspan=9, padx=10, pady=5, sticky="nsew")
+result_text.config(state=tk.DISABLED)
 
-result_label = tk.Label(root, textvariable=result_text)
-result_label.grid(row=9, column=0, columnspan=2, padx=5, pady=5)
+scrollbar = tk.Scrollbar(root)
+scrollbar.grid(row=0, column=3, rowspan=9, padx=0, pady=5, sticky="ns")
+result_text.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=result_text.yview)
 
 button_exit = tk.Button(root, text="Exit", command=root.destroy)
-button_exit.grid(row=10, column=0, columnspan=2, padx=5, pady=5)
+button_exit.grid(row=9, column=0, columnspan=2, padx=5, pady=5)
 
 arr = []
 
