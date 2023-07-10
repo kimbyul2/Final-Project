@@ -20,6 +20,18 @@ def save_data():
     df = pd.DataFrame(data)
     df.to_excel('student_data.xlsx', index=False)
 
+def load_data():
+    try:
+        df = pd.read_excel('student_data.xlsx')
+        for _, row in df.iterrows():
+            id = row['Student ID']
+            department = row['Department']
+            phone_number = row['Phone Number']
+            email = row['Email']
+            arr.append(Student(id, department, phone_number, email))
+    except pd.errors.EmptyDataError:
+        pass
+
 def add_student():
     id = int(entry_id.get())
     department = entry_department.get()
@@ -104,89 +116,95 @@ def select_email_domain(event):
         entry_email_domain.configure(state=tk.DISABLED)
     else:
         entry_email_domain.configure(state=tk.NORMAL)
-            
-root = tk.Tk()
-root.title("Student ID Manager")
 
-label_id = tk.Label(root, text="Student ID:")
-label_id.grid(row=0, column=0, padx=5, pady=5)
+def main():
+    load_data()
+    root.mainloop()
 
-entry_id = tk.Entry(root)
-entry_id.grid(row=0, column=1, padx=5, pady=5)
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Student ID Manager")
 
-label_department = tk.Label(root, text="Department:")
-label_department.grid(row=1, column=0, padx=5, pady=5)
+    label_id = tk.Label(root, text="Student ID:")
+    label_id.grid(row=0, column=0, padx=5, pady=5)
 
-entry_department = tk.Entry(root)
-entry_department.grid(row=1, column=1, padx=5, pady=5)
+    entry_id = tk.Entry(root)
+    entry_id.grid(row=0, column=1, padx=5, pady=5)
 
-label_phone = tk.Label(root, text="Phone Number:")
-label_phone.grid(row=2, column=0, padx=5, pady=5)
+    label_department = tk.Label(root, text="Department:")
+    label_department.grid(row=1, column=0, padx=5, pady=5)
 
-entry_phone = tk.Entry(root)
-entry_phone.grid(row=2, column=1, padx=5, pady=5)
+    entry_department = tk.Entry(root)
+    entry_department.grid(row=1, column=1, padx=5, pady=5)
 
-label_email = tk.Label(root, text="Email:")
-label_email.grid(row=3, column=0, padx=5, pady=5)
+    label_phone = tk.Label(root, text="Phone Number:")
+    label_phone.grid(row=2, column=0, padx=5, pady=5)
 
-entry_email_id = tk.Entry(root)
-entry_email_id.grid(row=3, column=1, padx=5, pady=5)
+    entry_phone = tk.Entry(root)
+    entry_phone.grid(row=2, column=1, padx=5, pady=5)
 
-entry_email_domain = tk.Entry(root)
-entry_email_domain.grid(row=3, column=4, padx=5, pady=5)
-entry_email_domain.configure(state=tk.DISABLED)
+    label_email = tk.Label(root, text="Email:")
+    label_email.grid(row=3, column=0, padx=5, pady=5)
 
-email_var = tk.StringVar(root)
-email_var.set("이메일선택")
-email_domain_options = [
-    "이메일선택",
-    "naver.com",
-    "hanmail.net",
-    "hotmail.com",
-    "nate.com",
-    "hufs.ac.kr",
-    "yahoo.co.kr",
-    "daum.com",
-    "paran.com",
-    "hanafos.com",
-    "empal.com",
-    "gmail.com",
-    "korea.com",
-    "hanmir.com",
-    "직접입력"
-]
-email_dropdown = tk.OptionMenu(root, email_var, *email_domain_options, command=select_email_domain)
-email_dropdown.grid(row=3, column=3, padx=5, pady=5)
+    entry_email_id = tk.Entry(root)
+    entry_email_id.grid(row=3, column=1, padx=5, pady=5)
 
-label_at = tk.Label(root, text="@")
-label_at.grid(row=3, column=2, padx=5, pady=5)
+    entry_email_domain = tk.Entry(root)
+    entry_email_domain.grid(row=3, column=4, padx=5, pady=5)
+    entry_email_domain.configure(state=tk.DISABLED)
 
-button_add = tk.Button(root, text="Add Student ID", command=add_student)
-button_add.grid(row=5, column=0, columnspan=4, padx=5, pady=5)
+    email_var = tk.StringVar(root)
+    email_var.set("이메일선택")
+    email_domain_options = [
+        "이메일선택",
+        "naver.com",
+        "hanmail.net",
+        "hotmail.com",
+        "nate.com",
+        "hufs.ac.kr",
+        "yahoo.co.kr",
+        "daum.com",
+        "paran.com",
+        "hanafos.com",
+        "empal.com",
+        "gmail.com",
+        "korea.com",
+        "hanmir.com",
+        "직접입력"
+    ]
+    email_dropdown = tk.OptionMenu(root, email_var, *email_domain_options, command=select_email_domain)
+    email_dropdown.grid(row=3, column=3, padx=5, pady=5)
 
-button_delete = tk.Button(root, text="Delete Student ID", command=delete_student)
-button_delete.grid(row=6, column=0, columnspan=4, padx=5, pady=5)
+    label_at = tk.Label(root, text="@")
+    label_at.grid(row=3, column=2, padx=5, pady=5)
 
-button_search = tk.Button(root, text="Search Student ID", command=search_student)
-button_search.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
+    button_add = tk.Button(root, text="Add Student ID", command=add_student)
+    button_add.grid(row=5, column=0, columnspan=4, padx=5, pady=5)
 
-button_update = tk.Button(root, text="Update Student ID", command=update_student)
-button_update.grid(row=8, column=0, columnspan=4, padx=5, pady=5)
+    button_delete = tk.Button(root, text="Delete Student ID", command=delete_student)
+    button_delete.grid(row=6, column=0, columnspan=4, padx=5, pady=5)
 
-button_display = tk.Button(root, text="Display Student IDs", command=display_students)
-button_display.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
+    button_search = tk.Button(root, text="Search Student ID", command=search_student)
+    button_search.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
 
-result_text = tk.Text(root, height=25, width=50)
-result_text.grid(row=0, column=4, rowspan=9, padx=10, pady=5)
+    button_update = tk.Button(root, text="Update Student ID", command=update_student)
+    button_update.grid(row=8, column=0, columnspan=4, padx=5, pady=5)
 
-scrollbar = tk.Scrollbar(root)
-scrollbar.grid(row=0, column=5, rowspan=9, padx=0, pady=5, sticky="ns")
-result_text.config(yscrollcommand=scrollbar.set)
-scrollbar.config(command=result_text.yview)
+    button_display = tk.Button(root, text="Display Student IDs", command=display_students)
+    button_display.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
 
-button_exit = tk.Button(root, text="Exit", command=root.destroy)
-button_exit.grid(row=10, column=0, columnspan=4, padx=5, pady=5)
+    result_text = tk.Text(root, height=25, width=50)
+    result_text.grid(row=0, column=4, rowspan=9, padx=10, pady=5)
 
-arr = []
+    scrollbar = tk.Scrollbar(root)
+    scrollbar.grid(row=0, column=5, rowspan=9, padx=0, pady=5, sticky="ns")
+    result_text.config(yscrollcommand=scrollbar.set)
+    scrollbar.config(command=result_text.yview)
 
-root.mainloop()
+    button_exit = tk.Button(root, text="Exit", command=root.destroy)
+    button_exit.grid(row=10, column=0, columnspan=4, padx=5, pady=5)
+
+    arr = []
+
+    root.protocol("WM_DELETE_WINDOW", save_data)
+    main()
