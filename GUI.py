@@ -3,8 +3,9 @@ import pandas as pd
 import os
 
 class Student:
-    def __init__(self, id, department, phone_number, email):
+    def __init__(self, id, name, department, phone_number, email):
         self.id = id
+        self.name = name
         self.department = department
         self.phone_number = phone_number
         self.email = email
@@ -14,6 +15,7 @@ def save_data():
     for student in arr:
         data.append({
             'Student ID': student.id,
+            'Name' : student.name,
             'Department': student.department,
             'Phone Number': student.phone_number,
             'Email': student.email
@@ -27,19 +29,20 @@ def update_excel_file():
     save_data()
 
 def load_data():
-    try:
+    global arr
+    if os.path.exists('student_data.xlsx'):
         df = pd.read_excel('student_data.xlsx')
-        for _, row in df.iterrows():
+        for index, row in df.iterrows():
             id = row['Student ID']
+            name = row['Name']
             department = row['Department']
             phone_number = row['Phone Number']
             email = row['Email']
-            arr.append(Student(id, department, phone_number, email))
-    except pd.errors.EmptyDataError:
-        pass
+            arr.append(Student(id, name, department, phone_number, email))
 
 def add_student():
     id = int(entry_id.get())
+    name = entry_name.get()
     department = entry_department.get()
     phone_number = entry_phone.get()
     email_id = entry_email_id.get()
@@ -47,14 +50,16 @@ def add_student():
     if email_domain == "직접입력":
         email_domain = entry_email_domain.get()
     email = f"{email_id}@{email_domain}"
-    arr.append(Student(id, department, phone_number, email))
+    arr.append(Student(id, name, department, phone_number, email))
     entry_id.delete(0, tk.END)
+    entry_name.delete(0, tk.END)
     entry_department.delete(0, tk.END)
     entry_phone.delete(0, tk.END)
     entry_email_id.delete(0, tk.END)
     email_var.set("이메일선택")
     email_dropdown.configure(state=tk.NORMAL)
     save_data()
+
 
 def delete_student():
     id = int(entry_id.get())
@@ -101,7 +106,7 @@ def display_students():
     result_text.delete(1.0, tk.END)
     result_text.insert(tk.END, "Student IDs:\n")
     for student in arr:
-        result_text.insert(tk.END, f"ID: {student.id}, Department: {student.department}, Phone: {student.phone_number}, Email: {student.email}\n")
+        result_text.insert(tk.END, f"ID: {student.id}, Name: {student.name}, Department: {student.department}, Phone: {student.phone_number}, Email: {student.email}\n")
     result_text.config(state=tk.DISABLED)
 
 def select_email_domain(event):
@@ -135,6 +140,12 @@ if __name__ == "__main__":
 
     entry_id = tk.Entry(root)
     entry_id.grid(row=0, column=1, padx=5, pady=5)
+
+    label_name = tk.Label(root, text="Name:")
+    label_name.grid(row=0, column=2, padx=5, pady=5)
+
+    entry_name = tk.Entry(root)
+    entry_name.grid(row=0, column=3, padx=5, pady=5)
 
     label_department = tk.Label(root, text="Department:")
     label_department.grid(row=1, column=0, padx=5, pady=5)
@@ -198,7 +209,7 @@ if __name__ == "__main__":
     button_display = tk.Button(root, text="Display Student IDs", command=display_students)
     button_display.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
 
-    result_text = tk.Text(root, height=25, width=50)
+    result_text = tk.Text(root, height=25, width=80)
     result_text.grid(row=0, column=4, rowspan=9, padx=12, pady=5)
 
     status_label = tk.Label(root, text="", fg="red")
