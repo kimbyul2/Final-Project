@@ -80,13 +80,17 @@ def delete_student():
 def search_student():
     id = int(entry_id.get())
     found = False
+    result_text.config(state=tk.NORMAL)
+    result_text.delete(1.0, tk.END)
     for j in range(len(arr)):
         if arr[j].id == id:
-            result_text.set(f"Student ID found at position {j}")
+            result_text.insert(tk.END, f"Student ID found at position {j}\n")
+            result_text.insert(tk.END, f"ID: {arr[j].id}, Name: {arr[j].name}, Department: {arr[j].department}, Phone: {arr[j].phone_number}, Email: {arr[j].email}\n")
             found = True
             break
     if not found:
-        result_text.set("Student ID not found")
+        result_text.insert(tk.END, "Student ID not found\n")
+    result_text.config(state=tk.DISABLED)
     entry_id.delete(0, tk.END)
 
 def update_student():
