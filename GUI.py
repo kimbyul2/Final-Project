@@ -98,12 +98,33 @@ def update_student():
     found = False
     for j in range(len(arr)):
         if arr[j].id == id:
-            result_text.set("Student ID updated")
+            arr[j].name = entry_name.get()
+            arr[j].department = entry_department.get()
+            arr[j].phone_number = entry_phone.get()
+            email_id = entry_email_id.get()
+            email_domain = email_var.get()
+            if email_domain == "직접입력":
+                email_domain = entry_email_domain.get()
+            arr[j].email = f"{email_id}@{email_domain}"
+            result_text.config(state=tk.NORMAL)
+            result_text.delete(1.0, tk.END)
+            result_text.insert(tk.END, "Student ID updated successfully\n")
+            result_text.insert(tk.END, f"Updated ID: {arr[j].id}, Name: {arr[j].name}, Department: {arr[j].department}, Phone: {arr[j].phone_number}, Email: {arr[j].email}\n")
+            result_text.config(state=tk.DISABLED)
             found = True
             break
     if not found:
-        result_text.set("Student ID not found")
+        result_text.config(state=tk.NORMAL)
+        result_text.delete(1.0, tk.END)
+        result_text.insert(tk.END, "Student ID not found\n")
+        result_text.config(state=tk.DISABLED)
     entry_id.delete(0, tk.END)
+    entry_name.delete(0, tk.END)
+    entry_department.delete(0, tk.END)
+    entry_phone.delete(0, tk.END)
+    entry_email_id.delete(0, tk.END)
+    email_var.set("이메일선택")
+    email_dropdown.configure(state=tk.NORMAL)
 
 def display_students():
     result_text.config(state=tk.NORMAL)
