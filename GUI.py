@@ -1,5 +1,6 @@
 import tkinter as tk
 import pandas as pd
+import os
 
 class Student:
     def __init__(self, id, department, phone_number, email):
@@ -19,6 +20,11 @@ def save_data():
         })
     df = pd.DataFrame(data)
     df.to_excel('student_data.xlsx', index=False)
+
+def update_excel_file():
+    if os.path.exists('student_data.xlsx'):
+        os.remove('student_data.xlsx')
+    save_data()
 
 def load_data():
     try:
@@ -61,6 +67,7 @@ def delete_student():
     entry_id.delete(0, tk.END)
     if found:
         status_label.config(text="Student ID deleted successfully", fg="green")
+        update_excel_file()
     else:
         status_label.config(text="Student ID not found", fg="red")
 
