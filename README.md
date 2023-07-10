@@ -47,3 +47,4 @@ Maintainer/Leader : 장현호
 - 업데이트 오류 수정
 - 이메일 도메인을 선택하지 않으면 저장 안되게 수정
 - Extend the display window
+- Added search function by student name
