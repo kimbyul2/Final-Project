@@ -27,16 +27,15 @@ def add_student():
     email_id = entry_email_id.get()
     email_domain = email_var.get()
     if email_domain == "직접입력":
-        email = email_id
-    else:
-        email = f"{email_id}@{email_domain}"
+        email_domain = entry_email_domain.get()
+    email = f"{email_id}@{email_domain}"
     arr.append(Student(id, department, phone_number, email))
     entry_id.delete(0, tk.END)
     entry_department.delete(0, tk.END)
     entry_phone.delete(0, tk.END)
     entry_email_id.delete(0, tk.END)
-    entry_email_id.configure(state=tk.NORMAL)
     email_var.set("이메일선택")
+    email_dropdown.configure(state=tk.NORMAL)
     save_data()
 
 def delete_student():
