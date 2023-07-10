@@ -58,11 +58,12 @@ def delete_student():
             del arr[j]
             found = True
             break
-    if found:
-        result_text.set("Student ID deleted")
-    else:
-        result_text.set("Student ID not found")
     entry_id.delete(0, tk.END)
+    if found:
+        status_label.config(text="Student ID deleted successfully", fg="green")
+    else:
+        status_label.config(text="Student ID not found", fg="red")
+
 
 def search_student():
     id = int(entry_id.get())
@@ -78,18 +79,15 @@ def search_student():
 
 def update_student():
     id = int(entry_id.get())
-    new_id = int(entry_new_id.get())
     found = False
     for j in range(len(arr)):
         if arr[j].id == id:
-            arr[j].id = new_id
             result_text.set("Student ID updated")
             found = True
             break
     if not found:
         result_text.set("Student ID not found")
     entry_id.delete(0, tk.END)
-    entry_new_id.delete(0, tk.END)
 
 def display_students():
     result_text.config(state=tk.NORMAL)
@@ -194,7 +192,10 @@ if __name__ == "__main__":
     button_display.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
 
     result_text = tk.Text(root, height=25, width=50)
-    result_text.grid(row=0, column=4, rowspan=9, padx=10, pady=5)
+    result_text.grid(row=0, column=4, rowspan=9, padx=12, pady=5)
+
+    status_label = tk.Label(root, text="", fg="red")
+    status_label.grid(row=9, column=4, columnspan=4, padx=5, pady=5)
 
     scrollbar = tk.Scrollbar(root)
     scrollbar.grid(row=0, column=5, rowspan=9, padx=0, pady=5, sticky="ns")
