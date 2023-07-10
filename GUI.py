@@ -26,14 +26,17 @@ def add_student():
     phone_number = entry_phone.get()
     email_id = entry_email_id.get()
     email_domain = email_var.get()
-    email = f"{email_id}@{email_domain}"
+    if email_domain == "직접입력":
+        email = email_id
+    else:
+        email = f"{email_id}@{email_domain}"
     arr.append(Student(id, department, phone_number, email))
     entry_id.delete(0, tk.END)
     entry_department.delete(0, tk.END)
     entry_phone.delete(0, tk.END)
     entry_email_id.delete(0, tk.END)
-    email_var.set("직접입력")
     entry_email_id.configure(state=tk.NORMAL)
+    email_var.set("이메일선택")
     save_data()
 
 def delete_student():
@@ -88,12 +91,21 @@ def display_students():
 def select_email_domain(event):
     selected_domain = email_var.get()
     if selected_domain == "직접입력":
-        entry_email_id.configure(state=tk.NORMAL)
+        if not hasattr(root, 'entry_email_domain'):
+            global entry_email_domain
+            entry_email_domain = tk.Entry(root)
+            entry_email_domain.grid(row=4, column=3, padx=5, pady=5, sticky='w')
     else:
-        entry_email_id.delete(0, tk.END)
-        entry_email_id.insert(tk.END, "")
-        entry_email_id.configure(state=tk.DISABLED)
-
+        if hasattr(root, 'entry_email_domain'):
+            entry_email_domain.grid_forget()
+            entry_email_domain.delete(0, tk.END)
+    if entry_email_id['state'] == tk.NORMAL:
+        entry_email_id.focus_set()
+    if selected_domain != "직접입력":
+        entry_email_domain.configure(state=tk.DISABLED)
+    else:
+        entry_email_domain.configure(state=tk.NORMAL)
+            
 root = tk.Tk()
 root.title("Student ID Manager")
 
@@ -121,10 +133,14 @@ label_email.grid(row=3, column=0, padx=5, pady=5)
 entry_email_id = tk.Entry(root)
 entry_email_id.grid(row=3, column=1, padx=5, pady=5)
 
+entry_email_domain = tk.Entry(root)
+entry_email_domain.grid(row=3, column=4, padx=5, pady=5)
+entry_email_domain.configure(state=tk.DISABLED)
+
 email_var = tk.StringVar(root)
-email_var.set("직접입력")
+email_var.set("이메일선택")
 email_domain_options = [
-    "직접입력",
+    "이메일선택",
     "naver.com",
     "hanmail.net",
     "hotmail.com",
@@ -137,28 +153,29 @@ email_domain_options = [
     "empal.com",
     "gmail.com",
     "korea.com",
-    "hanmir.com"
+    "hanmir.com",
+    "직접입력"
 ]
 email_dropdown = tk.OptionMenu(root, email_var, *email_domain_options, command=select_email_domain)
-email_dropdown.grid(row=3, column=2, padx=5, pady=5)
+email_dropdown.grid(row=3, column=3, padx=5, pady=5)
 
 label_at = tk.Label(root, text="@")
-label_at.grid(row=3, column=1, padx=5, pady=5)
+label_at.grid(row=3, column=2, padx=5, pady=5)
 
 button_add = tk.Button(root, text="Add Student ID", command=add_student)
-button_add.grid(row=4, column=0, columnspan=4, padx=5, pady=5)
+button_add.grid(row=5, column=0, columnspan=4, padx=5, pady=5)
 
 button_delete = tk.Button(root, text="Delete Student ID", command=delete_student)
-button_delete.grid(row=5, column=0, columnspan=4, padx=5, pady=5)
+button_delete.grid(row=6, column=0, columnspan=4, padx=5, pady=5)
 
 button_search = tk.Button(root, text="Search Student ID", command=search_student)
-button_search.grid(row=6, column=0, columnspan=4, padx=5, pady=5)
+button_search.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
 
 button_update = tk.Button(root, text="Update Student ID", command=update_student)
-button_update.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
+button_update.grid(row=8, column=0, columnspan=4, padx=5, pady=5)
 
 button_display = tk.Button(root, text="Display Student IDs", command=display_students)
-button_display.grid(row=8, column=0, columnspan=4, padx=5, pady=5)
+button_display.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
 
 result_text = tk.Text(root, height=25, width=50)
 result_text.grid(row=0, column=4, rowspan=9, padx=10, pady=5)
@@ -169,7 +186,7 @@ result_text.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=result_text.yview)
 
 button_exit = tk.Button(root, text="Exit", command=root.destroy)
-button_exit.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
+button_exit.grid(row=10, column=0, columnspan=4, padx=5, pady=5)
 
 arr = []
 
