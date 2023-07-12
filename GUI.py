@@ -137,22 +137,47 @@ def search_student():
 
 def update_student():
     id = entry_id.get()
-    
+    name = entry_name.get()
+    department = entry_department.get()
+    phone_number = entry_phone.get()
+    email_id = entry_email_id.get()
+    email_domain = email_var.get()
+
     if not id:
         status_label.config(text="Please enter your student ID.", fg="red")
         return
-    
+
     found = False
-    for j in range(len(arr)):
-        if arr[j].id == id:
-            result_text.set("Student ID updated")
+    for student in arr:
+        if student.id == id:
+            if name:
+                student.name = name
+            if department:
+                student.department = department
+            if phone_number:
+                student.phone_number = phone_number
+            if email_id and email_domain:
+                if email_domain == "Direct input":
+                    email_domain = entry_email_domain.get()
+                email = f"{email_id}@{email_domain}"
+                student.email = email
             found = True
             break
-    
-    if not found:
-        result_text.set("Student ID not found")
-    
+
     entry_id.delete(0, tk.END)
+    entry_name.delete(0, tk.END)
+    entry_department.delete(0, tk.END)
+    entry_phone.delete(0, tk.END)
+    entry_email_id.delete(0, tk.END)
+    email_var.set("select email")
+    email_dropdown.configure(state=tk.NORMAL)
+
+    if found:
+        status_label.config(text="Student ID updated successfully", fg="green")
+        update_excel_file()
+    else:
+        status_label.config(text="Student ID not found", fg="red")
+
 
 def display_students():
     result_text.config(state=tk.NORMAL)
