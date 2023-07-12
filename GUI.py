@@ -99,22 +99,21 @@ def delete_student():
 
 
 def search_student():
-    search_query = entry_id.get()
-    search_query = entry_name.get()
+    search_query = entry_id.get() or entry_name.get()
     found_students = []
-    
+
     if not search_query:
-        status_label.config(text="Please enter your student ID or name.", fg="red")
+        status_label.config(text="Please enter a student ID or name.", fg="red")
         return
 
     for student in arr:
         if str(student.id) == search_query or student.name.lower() == search_query.lower():
             found_students.append(student)
-    
+
     if found_students:
         result_text.config(state=tk.NORMAL)
         result_text.delete(1.0, tk.END)
-        
+
         for student in found_students:
             result_text.insert(tk.END, f"Student ID: {student.id}\n")
             result_text.insert(tk.END, f"Name: {student.name}\n")
@@ -122,17 +121,19 @@ def search_student():
             result_text.insert(tk.END, f"Phone Number: {student.phone_number}\n")
             result_text.insert(tk.END, f"Email: {student.email}\n")
             result_text.insert(tk.END, "-" * 30 + "\n")
-        
+
         result_text.config(state=tk.DISABLED)
-        status_label.config(text="Your search results have been displayed.", fg="green")
+        status_label.config(text="Search results displayed.", fg="green")
     else:
         result_text.config(state=tk.NORMAL)
         result_text.delete(1.0, tk.END)
+        result_text.insert(tk.END, "No results found for the search query.")
         result_text.config(state=tk.DISABLED)
-        status_label.config(text="No results were found for your search.", fg="red")
-    
+        status_label.config(text="No results found for the search query.", fg="red")
+
     entry_id.delete(0, tk.END)
     entry_name.delete(0, tk.END)
+
 
 def update_student():
     id = entry_id.get()
